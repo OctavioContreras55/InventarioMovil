@@ -5,6 +5,7 @@ from models.model_colors import DarkTheme
 from views.dashboard_view import DashboardView
 from views.inventario_view import InventarioView
 from views.control_puerta_view import ControlPuertaView
+from views.almacenes_view import AlmacenesView
 from views.reportes_view import ReportesView
 from views.sensores_view import SensoresView
 from views.ajustes_view import AjustesView
@@ -22,8 +23,9 @@ class PrincipalView:
         # Instanciar todas las vistas
         self.views = {
             "dashboard": DashboardView(page, user_data, self.theme),
-            "inventario": InventarioView(page, user_data, self.theme),
+            "inventario": None,
             "control_puerta": ControlPuertaView(page, user_data, self.theme),
+            "almacenes": AlmacenesView(page, user_data, self.theme),
             "reportes": ReportesView(page, user_data, self.theme),
             "sensores": SensoresView(page, user_data, self.theme),
             "ajustes": AjustesView(page, user_data, self.theme),
@@ -67,10 +69,11 @@ class PrincipalView:
             "dashboard": 0,
             "inventario": 1,
             "control_puerta": 2,
-            "reportes": 3,
-            "sensores": 4,
-            "ajustes": 5,
-            "perfil": 6,
+            "almacenes": 3,
+            "reportes": 4,
+            "sensores": 5,
+            "ajustes": 6,
+            "perfil": 7,
         }
         
         selected = view_to_index.get(self.current_view, 0)
@@ -130,6 +133,11 @@ class PrincipalView:
                     label="Control de Puerta",
                 ),
                 ft.NavigationDrawerDestination(
+                    icon=ft.Icons.WAREHOUSE_OUTLINED,
+                    selected_icon=ft.Icons.WAREHOUSE,
+                    label="Almacenes",
+                ),
+                ft.NavigationDrawerDestination(
                     icon=ft.Icons.ANALYTICS_OUTLINED,
                     selected_icon=ft.Icons.ANALYTICS,
                     label="Reportes",
@@ -176,11 +184,12 @@ class PrincipalView:
             0: "dashboard",
             1: "inventario",
             2: "control_puerta",
-            3: "reportes",
-            4: "sensores",
-            5: "ajustes",
-            6: "perfil",
-            7: "logout",
+            3: "almacenes",
+            4: "reportes",
+            5: "sensores",
+            6: "ajustes",
+            7: "perfil",
+            8: "logout",
         }
         
         if selected_index in view_map:
@@ -190,12 +199,16 @@ class PrincipalView:
                 self.logout()
             else:
                 self.current_view = view_name
-                self.content_area.content = self.views[view_name].build()
                 
-                # Cerrar el drawer actual antes de reconstruir
+                if view_name == "inventario":
+                    if self.views["inventario"] is None:
+                        self.views["inventario"] = InventarioView(self.page, self.user_data, self.theme, self.content_area)
+                    self.content_area.content = self.views[view_name].build()
+                else:
+                    self.content_area.content = self.views[view_name].build()
+                
                 self.page.close(self.drawer)
                 
-                # Reconstruir el drawer con el nuevo estado seleccionado
                 self.drawer = self.build_drawer()
                 self.page.drawer = self.drawer
                 

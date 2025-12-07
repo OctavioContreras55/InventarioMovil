@@ -1,0 +1,34 @@
+[project]
+name = "StockFlow"
+version = "1.0.0"
+description = "Sistema de Inventario Móvil"
+authors = [
+    {name = "Tu Nombre", email = "tu@email.com"}
+]
+dependencies = [
+    "flet>=0.28.3",
+    "flet-map>=0.1.0",
+    "mysql-connector-python",
+]
+
+[tool.flet]
+app_name = "StockFlow"
+app_short_name = "StockFlow"
+app_description = "Sistema de Inventario con ESP32"
+org_name = "com.stockflow"
+android_permissions = [
+    "android.permission.CAMERA",
+    "android.permission.READ_EXTERNAL_STORAGE",
+    "android.permission.WRITE_EXTERNAL_STORAGE",
+    "android.permission.INTERNET",
+    "android.permission.ACCESS_NETWORK_STATE",
+    "android.permission.ACCESS_FINE_LOCATION",
+    "android.permission.ACCESS_COARSE_LOCATION",
+]
+
+# Incluir todos los módulos necesarios
+modules = ["views", "models", "controllers"]
+include_packages = ["views", "models", "controllers"]
+
+# Assets
+assets_dir = "assets"
