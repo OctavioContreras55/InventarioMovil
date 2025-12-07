@@ -19,7 +19,7 @@ class ReportesView:
                     ),
                     ft.Container(height=20),
                     ft.Text(
-                        "🚧 Vista en construcción",
+                        "Vista para generar y visualizar reportes de inventario.",
                         size=16,
                         color=self.theme.TEXT_SECONDARY
                     ),

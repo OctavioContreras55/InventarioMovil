@@ -4,18 +4,14 @@ class InventarioView:
     def __init__(self, page: ft.Page, user_data: dict, theme):
         self.page = page
         self.user_data = user_data
-        self.theme = theme
-        
-        # Variables para búsqueda y filtrado
+        self.theme = theme        
         self.search_query = ""
         self.productos_data = []
-        self.productos_filtrados = []
-        
-        # Referencia al contenedor principal (se establece al construir)
+        self.productos_filtrados = []       
         self.main_container = None
     
+    #Función para cargar productos desde la base de datos
     def cargar_productos_bd(self):
-        """Carga todos los productos desde la base de datos"""
         from models.connection import get_db_connection
         
         try:
@@ -23,15 +19,15 @@ class InventarioView:
             if not conn:
                 return []
             
-            cursor = conn.cursor(dictionary=True)
+            cursor = conn.cursor(dictionary=True) # Usar dictionary=True al crear el cursor para obtener resultados como diccionarios
             
             cursor.execute("""
-                SELECT id, codigo, nombre, marca, categoria, cantidad, precio, ubicacion 
+                SELECT id, codigo, nombre, marca, descripcion, categoria, cantidad, precio_unitario, ubicacion 
                 FROM productos 
                 ORDER BY nombre
-            """)
+            """) # Consulta SQL para obtener productos ordenados por nombre
             
-            productos = cursor.fetchall()
+            productos = cursor.fetchall() # Obtener todos los productos como una lista de diccionarios
             cursor.close()
             conn.close()
             
@@ -40,8 +36,8 @@ class InventarioView:
             print(f"Error al cargar productos: {e}")
             return []
     
+    #Función para manejar cambios en la barra de búsqueda
     def on_search_change(self, e):
-        """Se ejecuta cada vez que el usuario escribe en la búsqueda"""
         self.search_query = e.control.value.lower()
         
         # Filtrar productos
@@ -59,10 +55,9 @@ class InventarioView:
         # Buscar el PrincipalView en el page para actualizar content_area
         self.rebuild_view()
     
+    #Función para reconstruir la vista con los productos filtrados
     def rebuild_view(self):
-        """Reconstruye solo la tabla sin regenerar todo"""
         if self.main_container:
-            # Reconstruir tabla con productos filtrados
             tabla_rows = []
             for producto in self.productos_filtrados:
                 tabla_rows.append(
@@ -112,8 +107,8 @@ class InventarioView:
             spacing=10,
         )
     
+    #Función para construir la vista completa del inventario
     def build(self):
-        """Construye y retorna la vista de Inventario"""
         # Cargar productos la primera vez
         if not self.productos_data:
             self.productos_data = self.cargar_productos_bd()
@@ -154,17 +149,20 @@ class InventarioView:
                     # Título
                     ft.Container(
                         content=ft.Text(
-                            "Gestión de Inventario",
+                            "Inventario",
                             size=28,
                             weight=ft.FontWeight.BOLD,
                             color=self.theme.TEXT_PRIMARY
                         ),
-                        padding=ft.padding.only(top=30, bottom=10),
+                        padding=ft.padding.only(top=30, bottom=10, left=20),
                         alignment=ft.alignment.center,
                     ),
                     
                     # Divisor
-                    ft.Divider(height=1, thickness=1, color=self.theme.DIVIDER),
+                    ft.Container(
+                      content=ft.Divider(height=1, thickness=1, color=self.theme.DIVIDER),
+                      margin=ft.margin.only(left=20, right=20)
+                    ),
                     
                     # Barra de búsqueda
                     ft.Container(
@@ -174,9 +172,14 @@ class InventarioView:
                     
                     # Tabla (con scroll)
                     ft.Container(
-                        content=ft.Column(
-                            controls=[tabla],
-                            scroll=ft.ScrollMode.AUTO,
+                        content=ft.Row(
+                          controls=[
+                            ft.Column(
+                                controls=[tabla],
+                                scroll=ft.ScrollMode.AUTO,
+                            ),
+                          ],
+                          scroll=ft.ScrollMode.ALWAYS,
                         ),
                         padding=ft.padding.only(left=20, right=20, bottom=20),
                         expand=True,

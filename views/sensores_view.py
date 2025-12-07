@@ -24,7 +24,7 @@ class SensoresView:
                     ),
                     ft.Container(height=20),
                     ft.Text(
-                        "🚧 Vista en construcción",
+                        "Vista para monitorear datos de sensores conectados al ESP32.",
                         size=16,
                         color=self.theme.TEXT_SECONDARY
                     ),

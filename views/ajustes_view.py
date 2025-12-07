@@ -19,7 +19,7 @@ class AjustesView:
                     ),
                     ft.Container(height=20),
                     ft.Text(
-                        "🚧 Vista en construcción",
+                        "Vista de ajustes y configuración de la aplicación.",
                         size=16,
                         color=self.theme.TEXT_SECONDARY
                     ),

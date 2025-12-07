@@ -48,4 +48,5 @@ class DashboardView:
                 alignment=ft.MainAxisAlignment.CENTER,
                 expand=True,
             ),
+            alignment=ft.alignment.center,
         )

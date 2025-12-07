@@ -24,7 +24,7 @@ class ControlPuertaView:
                     ),
                     ft.Container(height=20),
                     ft.Text(
-                        "🚧 Vista en construcción",
+                        "Vista para controlar el acceso a través de la puerta principal.",
                         size=16,
                         color=self.theme.TEXT_SECONDARY
                     ),
